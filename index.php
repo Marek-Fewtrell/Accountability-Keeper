@@ -12,7 +12,7 @@
 		<?php
 			//getstuff();
 			
-			getUserSchedule(1);
+			getUserSchedule($_SESSION['userId']);
 			
 			/*
 				Have a database,

@@ -23,21 +23,21 @@
     //--------------------------------------------------------------------
     
     
-    function getListOfActivities() {
+    function db_getListOfActivities() {
     	$conn = connect();
 		  $sql = "select * from `activities`";
 		  
 		  $result = $conn->query($sql);
 		  
+		  $resultArray = array();
+		  
 		  if ($result->num_rows > 0) {
-		  	echo '<table>';
-		  	echo '<tr><td>Name</td><td>Description</td><td>Time</td><td>Day</td></tr>';
 		  	while($row = $result->fetch_assoc()) {
-		  		echo "<tr><td>" . $row["name"] . "</td><td>" . $row["description"] . "</td><td>" . $row["time"] . "</td><td>" . $row["day"] . "</td</tr>";
+		  		array_push($resultArray, $row);
 		  	}
-		  	echo '</table>';
+		  	return $resultArray;
 		  } else {
-		  	echo "0 activities list";
+		  	return "0 activities list";
 		  }
 		  disconnect($conn);
     }
@@ -46,8 +46,18 @@
     	
     }
     
-    function addActivity() {
-        
+    function addActivity($name, $desc, $time, $day) {
+    	$conn = connect();
+		  $sql = "insert into activities (name, description, time, day) values ('$name', '$desc', '$time', '$day')";
+		  echo $sql;
+		  $result = $conn->query($sql);
+		  
+		  if ($result === TRUE) {
+		  	return true;
+		  } else {
+		  	return $conn->error;
+		  }
+		  disconnect($conn);
     }
     
     function updateActivity() {
@@ -64,7 +74,6 @@
     function checkUserLogin($username, $password) {
     	$conn = connect();
     	$sql = "select count(*), id from `user` where `name` = '".$username."' and `password` = '".$password."'";
-    	echo $sql;
 		  $result = $conn->query($sql);
 		  disconnect($conn);
 		  $row = mysqli_fetch_row($result);
@@ -82,19 +91,19 @@
     //--------------------------------------------------------------------
     
     
-    function getUserSchedule($userId) {
+    function db_getUserSchedule($userId) {
     	$conn = connect();
 		  $sql = "select activities.name, activities.description from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
 		  
 		  $result = $conn->query($sql);
 		  
+		  $resultArray = array();
+		  
 		  if ($result->num_rows > 0) {
-		  	echo '<table>';
-		  	echo '<tr><td>Name</td><td>Description</td></tr>';
 		  	while($row = $result->fetch_assoc()) {
-		  		echo "<tr><td>" . $row["name"] . "</td><td>" . $row["description"] . "</tr>";
+		  		array_push($resultArray, $row);
 		  	}
-		  	echo '</table>';
+		  	return $resultArray;
 		  } else {
 		  	echo "0 activities list";
 		  }
@@ -118,24 +127,19 @@
     	
     }
     
-    function getRecord($userId, $date) {
+    function db_getRecord($userId, $date) {
     	$conn = connect();
 		  $sql = "SELECT * FROM `record` WHERE userId = " . $userId . " and DATE(date) = '" . $date . "'";
 		  //echo $sql;
 		  $result = $conn->query($sql);
-		  
+		  $resultArray = array();
 		  if ($result->num_rows > 0) {
-		  	/*echo '<table>';
-		  	echo '<tr><td>Name</td><td>Description</td></tr>';
-		  	while($row = $result->fetch_assoc()) {
-		  		echo "<tr><td>" . $row["name"] . "</td><td>" . $row["description"] . "</tr>";
-		  	}
-		  	echo '</table>';*/
 		  	
 		  	while($row = $result->fetch_assoc()) {
-		  		echo "userId: " . $row["userId"] . " activityId: " . $row["activityId"] . " status: " . $row["status"];
+		  	array_push($resultArray, $row);
+		  		//echo "userId: " . $row["userId"] . " activityId: " . $row["activityId"] . " status: " . $row["status"];
 		  	}
-		  	
+		  	return $resultArray;
 		  } else {
 		  	echo "0 records list";
 		  }
