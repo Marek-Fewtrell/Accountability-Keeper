@@ -3,8 +3,8 @@
     //connects to the database and gets the stuff when needed.
     function connect() {
     	$serverName = "localhost";
-		  $userName = "";
-		  $password = "";
+		  $userName = "ak-dbAccess";
+		  $password = "password";
 		  
 		  $dbname = "accountibilityKeeper";
 		  
@@ -42,8 +42,18 @@
 		  disconnect($conn);
     }
     
-    function getActivity() {
-    	
+    function getActivity($id) {
+    	$conn = connect();
+		  $sql = "select * from activities where id=$id";
+		  echo $sql;
+		  $result = $conn->query($sql);
+		  
+		  if ($result->num_rows > 0) {
+		  	$row = mysqli_fetch_assoc($result);
+		  	return $row;
+		  } else {
+		  	return false;
+		  }
     }
     
     function addActivity($name, $desc, $time, $day) {
@@ -60,12 +70,32 @@
 		  disconnect($conn);
     }
     
-    function updateActivity() {
+    function updateActivity($id, $name, $description, $time, $day) {
+    	$conn = connect();
+    	$sql = "update activities set name='$name', description='$description', time='$time', day='$day' where id=$id";
+    	echo $sql;
     	
+    	$result = $conn->query($sql);
+    	
+    	if ($result === TRUE) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
     
-    function deleteActivity() {
+    function deleteActivity($id) {
+    	$conn = connect();
+    	$sql = "delete from activities where id = $id";
+    	echo $sql;
     	
+    	$result = $conn->query($sql);
+    	
+    	if ($result === TRUE) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
     
     //--------------------------------------------------------------------
@@ -93,7 +123,7 @@
     
     function db_getUserSchedule($userId) {
     	$conn = connect();
-		  $sql = "select activities.name, activities.description from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
+		  $sql = "select schedule.id, activities.name, activities.description from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
 		  
 		  $result = $conn->query($sql);
 		  
@@ -110,14 +140,58 @@
 		  disconnect($conn);
     }
     
-    function createSchedule() {
-    	
+    function db_getSingleScheduleItem($id) {
+    	$conn = connect();
+		  $sql = "select * from schedule where id=$id";
+		  echo $sql;
+		  $result = $conn->query($sql);
+		  
+		  if ($result->num_rows > 0) {
+		  	$row = mysqli_fetch_assoc($result);
+		  	return $row;
+		  } else {
+		  	return false;
+		  }
     }
-    function updateSchedule() {
-    	
+    
+    function createSchedule($activityId, $userId, $startDate) {
+    	$conn = connect();
+		  $sql = "insert into schedule (activityId, userId, startDate) values ('$activityId', '$userId', '$startDate')";
+		  echo $sql;
+		  $result = $conn->query($sql);
+		  
+		  if ($result === TRUE) {
+		  	return true;
+		  } else {
+		  	return $conn->error;
+		  }
+		  disconnect($conn);
     }
-    function deleteSchedule() {
+    function updateSchedule($activityId, $startDate, $id) {
+    	$conn = connect();
+    	$sql = "update schedule set activityId='$activityId', startDate='$startDate' where id=$id";
+    	echo $sql;
     	
+    	$result = $conn->query($sql);
+    	
+    	if ($result === TRUE) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    function deleteSchedule($id) {
+    	$conn = connect();
+    	$sql = "delete from schedule where id = $id";
+    	echo $sql;
+    	
+    	$result = $conn->query($sql);
+    	
+    	if ($result === TRUE) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
     
     //--------------------------------------------------------------------
@@ -136,7 +210,7 @@
 		  if ($result->num_rows > 0) {
 		  	
 		  	while($row = $result->fetch_assoc()) {
-		  	array_push($resultArray, $row);
+		  		array_push($resultArray, $row);
 		  		//echo "userId: " . $row["userId"] . " activityId: " . $row["activityId"] . " status: " . $row["status"];
 		  	}
 		  	return $resultArray;
