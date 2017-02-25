@@ -20,5 +20,36 @@
 	
 	getRecord($userId, $currentDate);
 	
+	$scheduleArray = db_getUserSchedule($userId);
+	echo '<hr>';
+	if ($scheduleArray) {
+		foreach($scheduleArray as $item) {
+			echo $item['startDate'] . '<br/>';
+			echo $timeSInce = calculateIfOnThisDay($currentDate, $item['startDate'])->format('%a days') . '<br/>';
+			
+			switch($item['day']) {
+				case 'daily':
+					echo "daily | ";
+					echo 'You need to do: ' . $item['name'] . '<br/>';
+					break;
+				case 'weekly';
+					$weeklyTimeSince = $timeSInce % 7;
+					if ($weeklyTimeSince == 0) {
+						echo 'It has been a week since<br/>';
+						echo 'You need to do activity: ' . $item['name'];
+					} else {
+						echo 'currently not today, it was '. $item['day'] . '| it is in ' . abs($weeklyTimeSince - 7) . 'day';
+					}
+					break;
+				default:
+					echo 'currently not today, it was '. $item['day'];
+			}
+			echo '<hr>';
+			
+		}
+	} else {
+		echo "nothing worked";
+	}
+	
 	include 'footer.html';
 ?>

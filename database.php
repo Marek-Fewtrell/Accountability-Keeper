@@ -123,7 +123,7 @@
     
     function db_getUserSchedule($userId) {
     	$conn = connect();
-		  $sql = "select schedule.id, activities.name, activities.description from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
+		  $sql = "select schedule.id, activities.name, activities.description, activities.day, activities.time, schedule.startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
 		  
 		  $result = $conn->query($sql);
 		  
@@ -135,7 +135,7 @@
 		  	}
 		  	return $resultArray;
 		  } else {
-		  	echo "0 activities list";
+		  	return false;
 		  }
 		  disconnect($conn);
     }

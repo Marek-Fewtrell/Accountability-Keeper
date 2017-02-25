@@ -43,5 +43,16 @@
   	echo '</table>';
 	  //echo "userId: " . $row["userId"] . " activityId: " . $row["activityId"] . " status: " . $row["status"];
   }
+  
+  
+  function calculateIfOnThisDay($curDate, $initialDate) {
+  	$date1 = new DateTime($curDate);
+  	$date2 = new DateTime($initialDate);
+  	
+  	$interval = $date1->diff($date2);
+  	
+  	return $interval;
+  	
+  }
 	
 ?>
