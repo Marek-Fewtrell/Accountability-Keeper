@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 22, 2017 at 08:14 PM
+-- Generation Time: Feb 26, 2017 at 08:09 PM
 -- Server version: 5.5.54-0+deb8u1
 -- PHP Version: 5.6.30-0+deb8u1
 
@@ -28,7 +28,6 @@ USE `accountibilityKeeper`;
 -- Table structure for table `activities`
 --
 
-DROP TABLE IF EXISTS `activities`;
 CREATE TABLE IF NOT EXISTS `activities` (
 `id` int(11) NOT NULL,
   `name` varchar(10) NOT NULL,
@@ -42,9 +41,9 @@ CREATE TABLE IF NOT EXISTS `activities` (
 --
 
 INSERT INTO `activities` (`id`, `name`, `description`, `time`, `day`) VALUES
-(1, 'act 1', 'it is act 1.', '08:00:00', 'daily'),
-(2, 'act 2', 'act 2 desc', '07:00:00', 'daily'),
-(3, 'act 3', 'act 3 desc', '10:00:00', 'weekly');
+(1, 'activity 1', 'it is act 1.', '08:00:00', 'daily'),
+(2, 'activity 2', 'act 2 desc', '07:00:00', 'daily'),
+(3, 'actibvity ', 'act 3 desc', '10:00:00', 'weekly');
 
 -- --------------------------------------------------------
 
@@ -52,29 +51,23 @@ INSERT INTO `activities` (`id`, `name`, `description`, `time`, `day`) VALUES
 -- Table structure for table `record`
 --
 
-DROP TABLE IF EXISTS `record`;
 CREATE TABLE IF NOT EXISTS `record` (
   `userId` int(11) NOT NULL,
   `activityId` int(11) NOT NULL,
   `status` text,
   `date` datetime NOT NULL,
 `id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `record`:
---   `activityId`
---       `activities` -> `id`
---   `userId`
---       `user` -> `id`
---
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `record`
 --
 
 INSERT INTO `record` (`userId`, `activityId`, `status`, `date`, `id`) VALUES
-(2, 2, 'COmplete', '2017-02-22 09:00:00', 1);
+(2, 2, 'COmplete', '2017-02-22 09:00:00', 1),
+(1, 3, 'Completed', '2017-02-22 14:00:00', 2),
+(1, 1, 'Done', '2017-02-21 00:00:00', 3),
+(1, 2, 'Done', '2017-02-23 00:00:00', 4);
 
 -- --------------------------------------------------------
 
@@ -82,31 +75,23 @@ INSERT INTO `record` (`userId`, `activityId`, `status`, `date`, `id`) VALUES
 -- Table structure for table `schedule`
 --
 
-DROP TABLE IF EXISTS `schedule`;
 CREATE TABLE IF NOT EXISTS `schedule` (
 `id` int(11) NOT NULL,
   `activityId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `startDate` date DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `schedule`:
---   `activityId`
---       `activities` -> `id`
---   `userId`
---       `user` -> `id`
---
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `schedule`
 --
 
 INSERT INTO `schedule` (`id`, `activityId`, `userId`, `startDate`) VALUES
-(1, 1, 1, NULL),
-(2, 2, 1, NULL),
-(3, 3, 2, NULL),
-(4, 2, 3, NULL);
+(1, 1, 1, '2017-02-21'),
+(2, 2, 1, '2017-02-24'),
+(3, 3, 2, '2017-02-16'),
+(4, 2, 3, '2017-02-26'),
+(5, 3, 1, '2017-02-17');
 
 -- --------------------------------------------------------
 
@@ -114,7 +99,6 @@ INSERT INTO `schedule` (`id`, `activityId`, `userId`, `startDate`) VALUES
 -- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
 `id` int(11) NOT NULL,
   `name` varchar(10) NOT NULL COMMENT 'username',
@@ -171,12 +155,12 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `record`
 --
 ALTER TABLE `record`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `user`
 --

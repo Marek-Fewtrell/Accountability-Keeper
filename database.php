@@ -123,7 +123,7 @@
     
     function db_getUserSchedule($userId) {
     	$conn = connect();
-		  $sql = "select schedule.id, activities.name, activities.description, activities.day, activities.time, schedule.startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
+		  $sql = "select schedule.id, activities.id AS activitiesId, activities.name, activities.description, activities.day, activities.time, schedule.startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
 		  
 		  $result = $conn->query($sql);
 		  
@@ -197,8 +197,23 @@
     //--------------------------------------------------------------------
     
     
-    function getListOfRecords() {
-    	
+    function getListOfRecords($userId) {
+    	$conn = connect();
+		  $sql = "select * from records where userId = $userId";
+		  
+		  $result = $conn->query($sql);
+		  
+		  $resultArray = array();
+		  
+		  if ($result->num_rows > 0) {
+		  	while($row = $result->fetch_assoc()) {
+		  		array_push($resultArray, $row);
+		  	}
+		  	return $resultArray;
+		  } else {
+		  	return false;
+		  }
+		  disconnect($conn);
     }
     
     function db_getRecord($userId, $date) {
@@ -215,16 +230,36 @@
 		  	}
 		  	return $resultArray;
 		  } else {
-		  	echo "0 records list";
+		  	echo false;
 		  }
 		  disconnect($conn);
     }
     
-    function createRecord() {
-    	
+    function createRecord($userId, $activityId, $status, $date) {
+    	$conn = connect();
+		  $sql = "insert into record (userId, activityId, status, date) values ('$userId', '$activityId', '$status', '$date')";
+		  //echo $sql;
+		  $result = $conn->query($sql);
+		  
+		  if ($result === TRUE) {
+		  	return true;
+		  } else {
+		  	return $conn->error;
+		  }
+		  disconnect($conn);
     }
-    function updateRecord() {
+    function updateRecord($userId, $recordId, $status) {
+    	$conn = connect();
+    	$sql = "update record set status='$status' where id=$recordId and userId = $userId";
+    	//echo $sql;
     	
+    	$result = $conn->query($sql);
+    	
+    	if ($result === TRUE) {
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
     function deleteRecord() {
     	

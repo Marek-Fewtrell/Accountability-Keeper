@@ -39,11 +39,21 @@
   		foreach($result as $row) {
 				echo "<tr><td>" . $row["activityId"] . "</td><td>" . $row["status"] . "</tr>";
 			}
+		} else {
+			echo '<br/>'.'Nothing retrieved for getRecord' . '<br/>';
 		}
   	echo '</table>';
 	  //echo "userId: " . $row["userId"] . " activityId: " . $row["activityId"] . " status: " . $row["status"];
   }
   
+  function searchRecordsArray($array, $searchTerm) {
+		foreach($array as $row) {
+			if ($row['activityId'] == $searchTerm) {
+				return $row;
+			}
+		}
+		return false;
+	}
   
   function calculateIfOnThisDay($curDate, $initialDate) {
   	$date1 = new DateTime($curDate);
