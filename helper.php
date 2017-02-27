@@ -22,8 +22,10 @@
 		echo '<form method="post" name="scheduleForm">';
 		echo '<table>';
   	echo '<tr><td>Remove</td><td>Name</td><td>Description</td></tr>';
-  	foreach($result as $row) {
-  		echo "<tr><td><input type=\"radio\" name=\"rowSelRadio\" value=\"" . $row['id'] . "\"></td><td>" . $row["name"] . "</td><td>" . $row["description"] . "<td><a href=\"?edit&id=" . $row['id'] . "\">Edit</a></td></tr>";
+  	if ($result != FALSE) {
+			foreach($result as $row) {
+				echo "<tr><td><input type=\"radio\" name=\"rowSelRadio\" value=\"" . $row['id'] . "\"></td><td>" . $row["name"] . "</td><td>" . $row["description"] . "<td><a href=\"?edit&id=" . $row['id'] . "\">Edit</a></td></tr>";
+			}
   	}
   	echo '</table>';
   	echo '<button name="removeAction">Remove</button>';

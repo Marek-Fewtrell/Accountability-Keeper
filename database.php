@@ -124,7 +124,26 @@
     function db_getUserSchedule($userId) {
     	$conn = connect();
 		  $sql = "select schedule.id, activities.id AS activitiesId, activities.name, activities.description, activities.day, activities.time, schedule.startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
+		  echo $sql;
+		  $result = $conn->query($sql);
 		  
+		  $resultArray = array();
+		  
+		  if ($result->num_rows > 0) {
+		  	while($row = $result->fetch_assoc()) {
+		  		array_push($resultArray, $row);
+		  	}
+		  	return $resultArray;
+		  } else {
+		  	return false;
+		  }
+		  disconnect($conn);
+    }
+    
+    function db_getUserScheduleAfterDate($userId, $date) {
+    	$conn = connect();
+		  $sql = "select schedule.id, activities.id AS activitiesId, activities.name, activities.description, activities.day, activities.time, schedule.startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId . " and schedule.startDate <= '" . $date . "'";
+		  //echo $sql;
 		  $result = $conn->query($sql);
 		  
 		  $resultArray = array();
