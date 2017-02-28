@@ -25,10 +25,10 @@
 	echo '</form>';
 	
 
-	echo '<a href="/Accountability-Keeper/tester.php?month=';
+	echo '<a href="/Accountability-Keeper/calendar.php?month=';
 	echo ($month - 1 < 1) ? '12' : ($month -1);
 	echo '">Previous Month</a>';
-	echo '<a href="/Accountability-Keeper/tester.php?month=';
+	echo '<a href="/Accountability-Keeper/calendar.php?month=';
 	echo ($month+1 > 12) ? '1' : ($month + 1);
 	echo '">Next Month</a>';
 	createTable($month, $year);
@@ -67,7 +67,7 @@
 		
 		for ($x = 1; $x <= $daysInMonth; $x++) {
 			echo '<td><a href="day.php?day='.$x.'&month='.$month.'&year='.$year.'">' . $x;
-			if ($x == date('j')) {
+			if ($x == date('j') && $month == date('m')) {
 				echo 'Today!';
 			}
 			echo '</a></td>';

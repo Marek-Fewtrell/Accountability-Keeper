@@ -11,6 +11,9 @@
 	$name = "";
 	$desc = "";
 	$time = "";
+	$timeHour = "1";
+	$timeMinute = "00";
+	
 	$day = "";
 	
 	if (isset($_GET['edit'])) {
@@ -20,6 +23,8 @@
 			$name = $result['name'];
 			$desc = $result['description'];
 			$time = $result['time'];
+			$timeHour = $time[0].$time[1];
+			$timeMinute = $time['3'].$time['4'];
 			$day = $result['day'];
 			$editting = true;
 		} else {
@@ -46,12 +51,21 @@
 			echo $desc;
 		}
 	?></textarea><br/>
-	Time:<input name="time" type="text" value="<?php
+	
+	Time</br>
+	Hour: <input type="number" name="timeHour" min="0" max="12" value="<?php
+		echo $timeHour;
+	?>">
+	Minutes: <input type="number" name="timeMinute" min="0" max="59" value="<?php
+		echo $timeMinute;
+	?>">
+	<br/>
+	<!--Time:<input name="time" type="text" value="<?php
 		if ($editting) {
 			echo $time;
 		}
-	?>"><br/>
-	Day:<input name="day" type="text" value="<?php
+	?>"><br/>-->
+	Day (daily, weekly):<input name="day" type="text" value="<?php
 		if ($editting) {
 			echo $day;
 		}
@@ -69,27 +83,25 @@
 <?php
 	
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		foreach($_REQUEST as $key => $value) {
-			echo $key . " " . $value . '<br/>';
-		}
 		if (isset($_POST['createAction'])) {
-			echo 'doing create action stuff';
-			$result = addActivity($_POST['name'], $_POST['description'], $_POST['time'], $_POST['day']);
+			$theTime = $_POST['timeHour'] . ':' . $_POST['timeMinute'] . ':00';
+			//$result = addActivity($_POST['name'], $_POST['description'], $_POST['time'], $_POST['day']);
+			$result = addActivity($_POST['name'], $_POST['description'], $theTime, $_POST['day']);
 			if ($result) {
 				echo 'Successfully added activity.';
 			} else {
 				echo $result;
 			}
 		} else if (isset($_POST['removeAction'])) {
-			echo 'Doing remove action stuff.';
 			if (deleteActivity($_POST['rowSelRdio'])) {
 				echo "successfully removed activity!";
 			} else {
 				echo 'unsuccessfully remvoe activity!';
 			}
 		} else if (isset($_POST['updateAction'])) {
-			echo 'Doing update action stuff';
-			$result = updateActivity($_POST['id'], $_POST['name'], $_POST['description'], $_POST['time'], $_POST['day']);
+			$theTime = $_POST['timeHour'] . ':' . $_POST['timeMinute'] . ':00';
+			//$result = updateActivity($_POST['id'], $_POST['name'], $_POST['description'], $_POST['time'], $_POST['day']);
+			$result = updateActivity($_POST['id'], $_POST['name'], $_POST['description'], $theTime, $_POST['day']);
 			if ($result) {
 				echo 'successfully updated activity';
 			} else {

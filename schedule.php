@@ -91,28 +91,22 @@
 <?php
 	
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		foreach($_REQUEST as $key => $value) {
-			echo $key . " " . $value . '<br/>';
-		}
 		if (isset($_POST['createAction'])) {
-			echo 'doing create action stuff';
 			$postDate = $_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day'];
-			echo '<hr>' . $postDate;
 			$result = createSchedule($_POST['activityId'], $_SESSION['userId'], $postDate);
 			if ($result) {
-				echo 'Successfully added schedule item.';
+				echo 'Successfully created schedule item.';
 			} else {
+				echo 'unsuccessfully created schedule item.';
 				echo $result;
 			}
 		} else if (isset($_POST['removeAction'])) {
-			echo 'Doing remove action stuff.';
 			if (deleteSchedule($_POST['rowSelRadio'])) {
 				echo "successfully removed schedule item!";
 			} else {
-				echo 'unsuccessfully remvoe schedule item!';
+				echo 'unsuccessfully removed schedule item!';
 			}
 		} else if (isset($_POST['updateAction'])) {
-			echo 'Doing update action stuff';
 			$postDate = $_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day'];
 			$result = updateSchedule($_POST['activityId'], $postDate, $_POST['id']);
 			if ($result) {
