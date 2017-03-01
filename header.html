@@ -1,19 +1,40 @@
 
 <!doctype html>
-<html>
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
 		<title>Accountable Keeper</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+		<script src="bootstrap/jquery.min.js"></script>
+		<script src="bootstrap/bootstrap.min.js"></script>
 	</head>
 	<body>
-		<header>
-			<h2>Accountability Keeper</h2>
-			<a href="index.php">Schedule</a> | 
-			<a href="userAccount.php">User Account</a> | 
-			<a href="activities.php">Activities</a> |
-			<a href="calendar.php">Calendar</a>
-			<hr>
+		<header class="">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-fluid">
+						<a class="navbar-brand" href="/Accountability-Keeper">Accountability Keeper</a>
+					</div>
+			<?php
+				
+				if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+				?>
+					<ul class="nav navbar-nav">
+						<li><a href="index.php">Schedule</a></li>
+						<li><a href="userAccount.php">User Account</a>
+						<li><a href="activities.php">Activities</a></li>
+						<li><a href="calendar.php">Calendar</a></li>
+					</ul>
+				<?php
+				}
+			?>
+				</div>
+			</nav>
 		</header>
 		<?php
 			include 'helper.php';
 		?>
+		<div class="container-fluid">
+			<div class="row">
