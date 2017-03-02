@@ -9,9 +9,11 @@
 
 	$month = (isset($_GET['month'])) ? $_GET['month'] : date('n');
 	$year = (isset($_GET['year'])) ? $_GET['year'] : date('Y');
-	
-	echo '<form method="get">';
-	echo 'Month:<select name="month">';
+	echo '<h5>Jump to month</h5>';
+	echo '<form method="get" class="form-inline">';
+	echo '<div class="form-group">';
+	echo '<label for="year">Month:</label>';
+	echo '<select name="month" class="form-control">';
 	for ($i = 1; $i < 13; $i++) {
 		echo '<option value="' . $i . '"';
 		if ($i == $month) {
@@ -19,11 +21,15 @@
 		}
 		echo '>'.$i.'</option>';
 	}
-	echo '</select><br/>';
-	echo "Year:<input type=\"number\" name=\"year\" value=\"$year\"><br/>";
-	echo '<input type="submit">';
+	echo '</select>';
+	echo '</div>';
+	echo '<div class="form-group">';
+	echo '<label for="year">Year:</label>';
+	echo "<input type=\"number\" class=\"form-control\" name=\"year\" value=\"$year\"><br/>";
+	echo '</div>';
+	echo '<input type="submit" class="btn btn-default">';
 	echo '</form>';
-	
+	echo '<hr>';
 
 	echo '<a href="/Accountability-Keeper/calendar.php?month=';
 	echo ($month - 1 < 1) ? '12' : ($month -1);
@@ -39,9 +45,10 @@
 
 
 	function createTable($month, $year) {
-		echo "<table>";
+		echo "<table class=\"table\">";
 		
-		$days = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+		//$days = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+		$days = array('Sun', 'Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat');
 		//create the table headers which hold the days.
 		echo '<tr>';
 		foreach($days as $day) {

@@ -29,65 +29,95 @@
 	}
 ?>
 
-
-<h5>Create new</h5>
-<form method="post" name="scheduleForm">
-	<input type="hidden" name="id" value="
-	<?php
-		if ($editting) {
-			echo $id;
-		}
-	?>">
-	Activity:<select name="activityId">
-		<?php
-			$result = db_getListOfActivities();
-			foreach ($result as $row) {
-				echo "<option value=\"".$row['id']."\"";
-				if($row['id'] == $activityId) {
-					echo ' selected ';
-				}
-				echo ">".$row['name']."</option>";
-			}
-		?>
-	</select>
-	<br/>
-	
-	<?php
+<div class="panel-group">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a data-toggle="collapse" href="#createFormPanel">
+				<h4 class="panel-title">
+					<?php
+						if ($editting) {
+							echo 'Update';
+						} else {
+							echo 'Create New ';
+						}
+					?>
+					Schedule Item
+				</h4>
+			</a>
+		</div>
+		<div id="createFormPanel" class="collapse panel-collapse">
+			<div class="panel-body">
+				<form method="post" name="scheduleForm">
+					<input type="hidden" name="id" value="
+					<?php
+						if ($editting) {
+							echo $id;
+						}
+					?>">
+					<div class="form-group">
+					<label for="activityId">Activity:</label>
+					<select name="activityId" class="form-control">
+						<?php
+							$result = db_getListOfActivities();
+							foreach ($result as $row) {
+								echo "<option value=\"".$row['id']."\"";
+								if($row['id'] == $activityId) {
+									echo ' selected ';
+								}
+								echo ">".$row['name']."</option>";
+							}
+						?>
+					</select>
+					</div>
+					<?php
 		
-		$newDate = new DateTime($startDate);
-		//echo $newDate->format('Y-m-d');
+						$newDate = new DateTime($startDate);
+						//echo $newDate->format('Y-m-d');
 		
-		$day = $newDate->format('d');
-		$month = $newDate->format('m');
-		$year = $newDate->format('Y');
-		//echo $day . '-' . $month . '-' . $year;
+						$day = $newDate->format('d');
+						$month = $newDate->format('m');
+						$year = $newDate->format('Y');
+						//echo $day . '-' . $month . '-' . $year;
 		
-		if ($editting) {
-			echo 'Current start date (d-m-y): ' . $newDate->format('d-m-Y') . '<br/>';
+						if ($editting) {
+							echo 'Current start date (d-m-y): ' . $newDate->format('d-m-Y') . '<br/>';
 			
-		}
-	?>
+						}
+					?>
+					<label>Start Date</label>
+					<div class="form-group">
+						<label for="activityId">Day:</label>
+						<input type="number" class="form-control" name="day" value="<?php echo $day; ?>">
+					</div>
+					<div class="form-group">
+						<label for="activityId">Month:</label>
+						<input type="number" class="form-control" name="month" value="<?php echo $month; ?>">
+					</div>
+					<div class="form-group">
+						<label for="activityId">Year:</label>
+						<input type="number" class="form-control" name="year" value="<?php echo $year; ?>">
+					</div>
+					<div class="form-group">
 	
+					<!-- Start Date(YYYY-MM-DD):<input name="startDate" type="text" value="<?php  ?>"><br/>-->
 	
-	Day: <input type="number" name="day" value="<?php echo $day; ?>">
-	Month: <input type="number" name="month" value="<?php echo $month; ?>">
-	Year: <input type="number" name="year" value="<?php echo $year; ?>">
-	
-	<!-- Start Date(YYYY-MM-DD):<input name="startDate" type="text" value="<?php  ?>"><br/>-->
-	
-	<br/>
-	<?php
-		if ($editting) {
-			echo '<input type="submit" name="updateAction" value="Update">';
-		} else {
-			echo '<input type="submit" name="createAction" value="Create">';
-		}
-	?>
-</form>
+					<br/>
+					<?php
+						if ($editting) {
+							echo '<input type="submit" class="btn btn-default" name="updateAction" value="Update">';
+						} else {
+							echo '<input type="submit" class="btn btn-default" name="createAction" value="Create">';
+						}
+					?>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 
-<h4>Schedule</h4>
+<h3>Schedule</h3>
 <?php
 	
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -2,7 +2,6 @@
 	session_start();
 	include 'header.html'
 ?>
-<h4>User account</h4>
 <?php
 	
 	if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true) {
@@ -10,6 +9,9 @@
 			session_unset();
 			session_destroy();
 			echo "You have been logged out!";
+			
+			//redirect to login page.
+			
 		} else {
 			echo "User details<br/>";
 			echo "username: " . $_SESSION['username'] . '<br/>';
@@ -21,39 +23,44 @@
 				if ($_POST['password'] == $_POST['passwordConfirm']) {
 					$result = createUser($_POST['username'], $_POST['password']);
 					if ($result) {
+						//return to the login page with the message displayed.
 						echo 'successfully created user.';
 					} else {
 						echo 'unsuccessfully created user.';
+						//return to the login page with the message displayed.
 					}
 				} else {
 				
 				}
 			} else {
-				$result = checkUserLogin($_POST["username"], $_POST["password"]);
+				$result = checkUserLogin($_POST["loginUsername"], $_POST["loginPassword"]);
 				if ($result) {
+				
+					//maybe just redirect to the calendar
+					
 					echo "Now logged in.";
 					$_SESSION['loggedIn'] = true;
-					$_SESSION['username'] = $_POST["username"];
+					$_SESSION['username'] = $_POST["loginUsername"];
 					$_SESSION['userId'] = $result;
 				} else {
 					echo "Failed. Couldn't login with that stuff!";
+					//display the login page as well with this message.
 				}
 			}
 		} else {
 			?>
-			Login
-			<br/>
+			<h4>Login</h4>
 				<form method="post" action="userAccount.php" class="form-horizontal">
 					<div class="form-group">
 						<label for="username" class="control-label col-sm-2">Username:</label>
 						<div class="col-sm-10">
-							<input type="text" name="username" class="form-control">
+							<input type="text" name="loginUsername" class="form-control">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="password" class="control-label col-sm-2">Password:</label>
 						<div class="col-sm-10">
-							<input type="password" name="password" class="form-control">
+							<input type="password" name="loginPassword" class="form-control">
 						</div>
 					</div>
 					<div class="form-group">
@@ -62,9 +69,8 @@
 						</div>
 					</div>
 				</form>
-			<br/>
-			<br/>
-			Create new account
+			<hr>
+			<h4>Create new account</h4>
 			<br/>
 			<form method="post">
 				<input type="hidden" name="createAccount">

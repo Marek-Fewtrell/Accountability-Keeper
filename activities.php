@@ -33,53 +33,87 @@
 	}
 ?>
 
-<h5>Create new</h5>
-<form method="post" name="activityForm">
-	<input type="hidden" name="id" value="
-	<?php
-		if ($editting) {
-			echo $id;
-		}
-	?>">
-	Name:<input type="text" name="name" value="<?php
-		if ($editting) {
-			echo $name;
-		}
-	?>"><br/>
-	Description:<textarea name="description" cols="30" rows="5"><?php
-		if ($editting) {
-			echo $desc;
-		}
-	?></textarea><br/>
+<div class="panel-group">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a data-toggle="collapse" href="#createFormPanel">
+				<h4 class="panel-title">
+					<?php
+						if ($editting) {
+							echo 'Update ';
+						} else {
+							echo 'Create New ';
+						}
+					?>
+					Activity
+				</h4>
+			</a>
+		</div>
+		<div id="createFormPanel" class="collapse panel-collapse">
+			<div class="panel-body">
+				<form method="post" name="activityForm">
+				<input type="hidden" name="id" value="
+				<?php
+					if ($editting) {
+						echo $id;
+					}
+				?>">
+				<div class="form-group">
+					<label for="name">Name:</label>
+					<input type="text" name="name" class="form-control" value="<?php
+						if ($editting) {
+							echo $name;
+						}
+					?>">
+				</div>
+				<div class="form-group">
+					<label for="description">Description:</label>
+					<textarea name="description" class="form-control" cols="30" rows="5"><?php
+					if ($editting) {
+						echo $desc;
+					}
+				?></textarea><br/>
+				</div>
+				<label>Time</label>
+				<div class="form-group">
+					<label for="timeHour">Hour:</label>
+					<input type="number" name="timeHour" class="form-control" min="0" max="12" value="<?php
+					echo $timeHour;
+				?>">
+					<label for="timeMinute">Minutes:</label>
+					<input type="number" name="timeMinute" class="form-control" min="0" max="59" value="<?php
+					echo $timeMinute;
+				?>">
+				<!--Time:<input name="time" type="text" value="<?php
+					if ($editting) {
+						echo $time;
+					}
+				?>"><br/>-->
+				</div>
+				<div class="form-group">
+					<label for="day">Day (daily, weekly):</label>
+					<input name="day" type="text" class="form-control" value="<?php
+					if ($editting) {
+						echo $day;
+					}
+				?>">
+				</div>
+				<?php
+				if ($editting) {
+					echo '<input type="submit" class="btn btn-default" name="updateAction" value="Update">';
+				} else {
+					echo '<input type="submit" class="btn btn-default" name="createAction" value="Create">';
+				}
+				?>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
 	
-	Time</br>
-	Hour: <input type="number" name="timeHour" min="0" max="12" value="<?php
-		echo $timeHour;
-	?>">
-	Minutes: <input type="number" name="timeMinute" min="0" max="59" value="<?php
-		echo $timeMinute;
-	?>">
-	<br/>
-	<!--Time:<input name="time" type="text" value="<?php
-		if ($editting) {
-			echo $time;
-		}
-	?>"><br/>-->
-	Day (daily, weekly):<input name="day" type="text" value="<?php
-		if ($editting) {
-			echo $day;
-		}
-	?>"><br/>
-	<?php
-	if ($editting) {
-		echo '<input type="submit" name="updateAction" value="Update">';
-	} else {
-		echo '<input type="submit" name="createAction" value="Create">';
-	}
-	?>
-</form>
+	
 
-<h4>Activities</h4>
+<h3>Activities</h3>
 <?php
 	
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {

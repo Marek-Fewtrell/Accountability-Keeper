@@ -71,7 +71,7 @@
 					echo $item['description'] . '<br/>';
 					echo 'At time: ' . $item['time'] . '<br/>';
 					
-					echo '<form method="post">';
+					echo '<form method="post" class="form-inline">';
 					
 					echo '<input type="hidden" name="activityId" value="'.$item['activitiesId'].'">';
 					
@@ -82,7 +82,9 @@
 						echo '<input type="hidden" name="theId" value="'.$searchResult['id'].'">';
 					}
 					
-					echo '<select name="status">';
+					echo '<div class="form-group">';
+					echo '<label for="status">Status:</label>';
+					echo '<select name="status" class="form-control">';
 					if ($searchResult['status'] == 'done') {
 						echo '<option value="done" selected>Done</option>';
 						echo '<option value="not done">Not Done</option>';
@@ -91,7 +93,8 @@
 						echo '<option value="not done" selected>Not Done</option>';
 					}
 					echo '</select>';
-					echo '<input type="submit" value="Set Activity Status">';
+					echo '</div>';
+					echo '<input type="submit" class="btn btn-default" value="Set Activity Status">';
 					echo '</form>';
 					break;
 				case 'weekly';
@@ -101,7 +104,7 @@
 						//echo 'It has been a week since<br/>';
 						echo 'You need to do activity: ' . $item['name'] . '<br/>';
 						echo $item['description'] . '<br/>';
-						echo '<form method="post">';
+						echo '<form method="post" class="form-inline">';
 					
 						echo '<input type="hidden" name="activityId" value="'.$item['activitiesId'].'">';
 					
@@ -111,8 +114,10 @@
 							echo '<input type="hidden" name="formAction" value="update">';
 							echo '<input type="hidden" name="theId" value="'.$searchResult['id'].'">';
 						}
-					
-						echo '<select name="status">';
+						
+						echo '<div class="form-group">';
+						echo '<label for="status">Status:</label>';
+						echo '<select name="status" class="form-control">';
 						if ($searchResult['status'] == 'done') {
 							echo '<option value="done" selected>Done</option>';
 							echo '<option value="not done">Not Done</option>';
@@ -121,7 +126,8 @@
 							echo '<option value="not done" selected>Not Done</option>';
 						}
 						echo '</select>';
-						echo '<input type="submit" value="Set Activity Status">';
+						echo '</div>';
+						echo '<input type="submit" class="btn btn-default" value="Set Activity Status">';
 						echo '</form>';
 						
 					} else {
