@@ -47,6 +47,7 @@
 	$scheduleArray = db_getUserScheduleAfterDate($userId, $currentDate);
 	echo '<hr>';
 	if ($scheduleArray) {
+		echo '<ul class="list-group">';
 		foreach($scheduleArray as $item) {
 			//echo 'Started On: ' . $item['startDate'] . '<br/>';
 			$timeSInce = calculateIfOnThisDay($currentDate, $item['startDate'])->format('%a days') . '<br/>';
@@ -58,77 +59,38 @@
 			}
 			//echo 'Here is the search Result:'.$searchResult . '<hr>';
 			
+			//if it's not on today, then output the number of days until it is.
+			//else output the item for today.
+			//check whether a record alreadys exists for this activity on this day.
 			switch($item['day']) {
 				case 'daily':
-					echo "daily activity | ";
-					
-					if ($searchResult['status'] == 'done') {
-						echo 'You have already done: ' . $item['name'] . '<br/>';
-					} else {
-						echo 'You need to do: ' . $item['name'] . '<br/>';
-					}
-					
-					echo $item['description'] . '<br/>';
-					echo 'At time: ' . $item['time'] . '<br/>';
-					
-					echo '<form method="post" class="form-inline">';
-					
-					echo '<input type="hidden" name="activityId" value="'.$item['activitiesId'].'">';
-					
-					if ($searchResult == FALSE) {
-						echo '<input type="hidden" name="formAction" value="create">';
-					} else {
-						echo '<input type="hidden" name="formAction" value="update">';
-						echo '<input type="hidden" name="theId" value="'.$searchResult['id'].'">';
-					}
-					
-					echo '<div class="form-group">';
-					echo '<label for="status">Status:</label>';
-					echo '<select name="status" class="form-control">';
-					if ($searchResult['status'] == 'done') {
-						echo '<option value="done" selected>Done</option>';
-						echo '<option value="not done">Not Done</option>';
-					} else {
-						echo '<option value="done">Done</option>';
-						echo '<option value="not done" selected>Not Done</option>';
-					}
-					echo '</select>';
+				
+				
+				/*echo '<div class="row">';
+					echo '<div class="col-md-9 row">';
+						echo '<h4 class="list-group-item-heading col-md-6">Name: ' . $row["name"] . "</h4>";
+						echo '<p class="col-md-6 text-center">Start Date: ' . $row['startDate'] . '</p>';
+						echo '<p class="list-group-item-text col-md-12">Description: ' . $row["description"] . "</p>";
 					echo '</div>';
-					echo '<input type="submit" class="btn btn-default" value="Set Activity Status">';
-					echo '</form>';
+					echo "<div class=\"col-md-3 btn-group\"><a href=\"?edit&id=" . $row['id'] . "\" class=\"btn btn-default\">Edit</a>";
+					echo '<button name="removeAction" value="'.$row['id'].'" class="btn btn-danger">Remove</button></div>';
+				echo '</div>';
+				echo '</li>';*/
+				
+				
+				
+					echo '<li class="list-group-item">';
+					echo '<div class="row">';
+					echo "<h4 class=\"list-group-item-heading col-md-6\">Daily activity | ";
+					echo outputReportItem($searchResult, $item);
+					echo '</li>';
 					break;
 				case 'weekly';
 					$weeklyTimeSince = $timeSInce % 7;
-					echo 'weekly activity | ';
+					echo 'Weekly activity | ';
 					if ($weeklyTimeSince == 0) {
-						//echo 'It has been a week since<br/>';
-						echo 'You need to do activity: ' . $item['name'] . '<br/>';
-						echo $item['description'] . '<br/>';
-						echo '<form method="post" class="form-inline">';
-					
-						echo '<input type="hidden" name="activityId" value="'.$item['activitiesId'].'">';
-					
-						if ($searchResult == FALSE) {
-							echo '<input type="hidden" name="formAction" value="create">';
-						} else {
-							echo '<input type="hidden" name="formAction" value="update">';
-							echo '<input type="hidden" name="theId" value="'.$searchResult['id'].'">';
-						}
 						
-						echo '<div class="form-group">';
-						echo '<label for="status">Status:</label>';
-						echo '<select name="status" class="form-control">';
-						if ($searchResult['status'] == 'done') {
-							echo '<option value="done" selected>Done</option>';
-							echo '<option value="not done">Not Done</option>';
-						} else {
-							echo '<option value="done">Done</option>';
-							echo '<option value="not done" selected>Not Done</option>';
-						}
-						echo '</select>';
-						echo '</div>';
-						echo '<input type="submit" class="btn btn-default" value="Set Activity Status">';
-						echo '</form>';
+						echo outputReportItem($searchResult, $item);
 						
 					} else {
 						echo $item['name'] . ' is not today<br/>';
@@ -140,14 +102,11 @@
 					echo 'currently not today, it was '. $item['day'];
 			}
 			echo '<hr>';
-			
 		}
+		echo '</ul>';
 	} else {
-		echo "nothing worked";
+		echo "Nothing from the schedule is on today.";
 	}
-	
-
-	
 	
 	include 'footer.html';
 ?>

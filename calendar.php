@@ -13,15 +13,7 @@
 	echo '<form method="get" class="form-inline">';
 	echo '<div class="form-group">';
 	echo '<label for="year">Month:</label>';
-	echo '<select name="month" class="form-control">';
-	for ($i = 1; $i < 13; $i++) {
-		echo '<option value="' . $i . '"';
-		if ($i == $month) {
-			echo ' selected';
-		}
-		echo '>'.$i.'</option>';
-	}
-	echo '</select>';
+	echo createMonthDropdown('month', $month);
 	echo '</div>';
 	echo '<div class="form-group">';
 	echo '<label for="year">Year:</label>';

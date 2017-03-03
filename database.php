@@ -25,7 +25,7 @@
     
     function db_getListOfActivities() {
     	$conn = connect();
-		  $sql = "select * from `activities`";
+		  $sql = "select *, DATE_FORMAT(time, '%h:%i') as formatted_time from `activities`";
 		  
 		  $result = $conn->query($sql);
 		  
@@ -156,7 +156,7 @@
     
     function db_getUserScheduleAfterDate($userId, $date) {
     	$conn = connect();
-		  $sql = "select schedule.id, activities.id AS activitiesId, activities.name, activities.description, activities.day, activities.time, schedule.startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId . " and schedule.startDate <= '" . $date . "'";
+		  $sql = "select schedule.id, activities.id AS activitiesId, activities.name, activities.description, activities.day, DATE_FORMAT(activities.time, '%h:%i') as time, schedule.startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId . " and schedule.startDate <= '" . $date . "'";
 		  //echo $sql;
 		  $result = $conn->query($sql);
 		  
@@ -270,7 +270,8 @@
     
     function createRecord($userId, $activityId, $status, $date) {
     	$conn = connect();
-		  $sql = "insert into record (userId, activityId, status, date) values ('$userId', '$activityId', '$status', '$date')";
+		  //$sql = "insert into record (userId, activityId, status, date) values ('$userId', '$activityId', '$status', '$date')";
+		  $sql = "insert into record (userId, activityId, status, date) values ('$userId', '$activityId', '$status', NOW())";
 		  //echo $sql;
 		  $result = $conn->query($sql);
 		  
@@ -283,7 +284,7 @@
     }
     function updateRecord($userId, $recordId, $status) {
     	$conn = connect();
-    	$sql = "update record set status='$status' where id=$recordId and userId = $userId";
+    	$sql = "update record set status='$status', date=NOW() where id=$recordId and userId = $userId";
     	//echo $sql;
     	
     	$result = $conn->query($sql);

@@ -92,11 +92,21 @@
 				</div>
 				<div class="form-group">
 					<label for="day">Day (daily, weekly):</label>
-					<input name="day" type="text" class="form-control" value="<?php
-					if ($editting) {
-						echo $day;
-					}
-				?>">
+					<select name="day" class="form-control">
+						<?php
+							if ($editting && $day == 'daily') {
+								echo '<option value="daily" selected="true">daily</option>';
+							} else {
+								echo '<option value="daily">daily</option>';
+							}
+							
+							if ($editting && $day == 'weekly') {
+								echo '<option value="weekly" selected="true">weekly</option>';
+							} else {
+								echo '<option value="weekly">weekly</option>';
+							}
+						?>
+					</select>
 				</div>
 				<?php
 				if ($editting) {
@@ -127,7 +137,7 @@
 				echo $result;
 			}
 		} else if (isset($_POST['removeAction'])) {
-			if (deleteActivity($_POST['rowSelRdio'])) {
+			if (deleteActivity($_POST['removeAction'])) {
 				echo "successfully removed activity!";
 			} else {
 				echo 'unsuccessfully remvoe activity!';

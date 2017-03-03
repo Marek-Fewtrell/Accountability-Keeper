@@ -91,7 +91,7 @@
 					</div>
 					<div class="form-group">
 						<label for="activityId">Month:</label>
-						<input type="number" class="form-control" name="month" value="<?php echo $month; ?>">
+						<?php echo createMonthDropdown('month', $month); ?>
 					</div>
 					<div class="form-group">
 						<label for="activityId">Year:</label>
@@ -131,7 +131,7 @@
 				echo $result;
 			}
 		} else if (isset($_POST['removeAction'])) {
-			if (deleteSchedule($_POST['rowSelRadio'])) {
+			if (deleteSchedule($_POST['removeAction'])) {
 				echo "successfully removed schedule item!";
 			} else {
 				echo 'unsuccessfully removed schedule item!';
