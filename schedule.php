@@ -6,6 +6,7 @@
 	}
 
 	include 'header.html';
+	include 'helper.php';
 	
 	$editting = false;
 	$id = "";
@@ -47,7 +48,7 @@
 		</div>
 		<div id="createFormPanel" class="collapse panel-collapse">
 			<div class="panel-body">
-				<form method="post" name="scheduleForm">
+				<form method="post" name="scheduleForm" action="schedule.php">
 					<input type="hidden" name="id" value="
 					<?php
 						if ($editting) {
@@ -125,24 +126,24 @@
 			$postDate = $_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day'];
 			$result = createSchedule($_POST['activityId'], $_SESSION['userId'], $postDate);
 			if ($result) {
-				echo 'Successfully created schedule item.';
+				outputStatusMessage('Successfully created schedule item.', 'success');
 			} else {
-				echo 'unsuccessfully created schedule item.';
-				echo $result;
+				outputStatusMessage('Unsuccessfully created schedule item.', 'warning');
 			}
 		} else if (isset($_POST['removeAction'])) {
 			if (deleteSchedule($_POST['removeAction'])) {
-				echo "successfully removed schedule item!";
+				outputStatusMessage('Successfully removed schedule item.', 'success');
 			} else {
-				echo 'unsuccessfully removed schedule item!';
+				outputStatusMessage('Unsuccessfully removed schedule item.', 'warning');
 			}
 		} else if (isset($_POST['updateAction'])) {
 			$postDate = $_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day'];
 			$result = updateSchedule($_POST['activityId'], $postDate, $_POST['id']);
 			if ($result) {
-				echo 'successfully updated activity';
+				outputStatusMessage('Successfully updated schedule item.', 'success');
 			} else {
 				echo 'unsuccessfully updated activity';
+				outputStatusMessage('Unsuccessfully updated schedule item.', 'warning');
 			}
 		}
 		

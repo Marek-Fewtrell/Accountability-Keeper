@@ -5,6 +5,7 @@
 		exit();
 	}
 	include 'header.html';
+	include 'helper.php';
 	
 	$editting = false;
 	$id = "";
@@ -51,7 +52,7 @@
 		</div>
 		<div id="createFormPanel" class="collapse panel-collapse">
 			<div class="panel-body">
-				<form method="post" name="activityForm">
+				<form method="post" name="activityForm" action="activities.php">
 				<input type="hidden" name="id" value="
 				<?php
 					if ($editting) {
@@ -132,24 +133,24 @@
 			//$result = addActivity($_POST['name'], $_POST['description'], $_POST['time'], $_POST['day']);
 			$result = addActivity($_POST['name'], $_POST['description'], $theTime, $_POST['day']);
 			if ($result) {
-				echo 'Successfully added activity.';
+				outputStatusMessage('Successfully added activity.', 'success');
 			} else {
-				echo $result;
+				outputStatusMessage('Unsuccessfully added activity.', 'warning');
 			}
 		} else if (isset($_POST['removeAction'])) {
 			if (deleteActivity($_POST['removeAction'])) {
-				echo "successfully removed activity!";
+				outputStatusMessage('Successfully removed activity.', 'success');
 			} else {
-				echo 'unsuccessfully remvoe activity!';
+				outputStatusMessage('Unsuccessfully removed activity.', 'warning');
 			}
 		} else if (isset($_POST['updateAction'])) {
 			$theTime = $_POST['timeHour'] . ':' . $_POST['timeMinute'] . ':00';
 			//$result = updateActivity($_POST['id'], $_POST['name'], $_POST['description'], $_POST['time'], $_POST['day']);
 			$result = updateActivity($_POST['id'], $_POST['name'], $_POST['description'], $theTime, $_POST['day']);
 			if ($result) {
-				echo 'successfully updated activity';
+				outputStatusMessage('Successfully updated activity.', 'success');
 			} else {
-				echo 'unsuccessfully updated activity';
+				outputStatusMessage('Unsuccessfully updated activity.', 'warning');
 			}
 		}
 		

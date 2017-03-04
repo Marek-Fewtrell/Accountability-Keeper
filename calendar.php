@@ -6,6 +6,7 @@
 		exit();
 	}
 	include 'header.html';
+	include 'helper.php';
 
 	$month = (isset($_GET['month'])) ? $_GET['month'] : date('n');
 	$year = (isset($_GET['year'])) ? $_GET['year'] : date('Y');
