@@ -50,7 +50,7 @@
 				</h4>
 			</a>
 		</div>
-		<div id="createFormPanel" class="collapse panel-collapse">
+		<div id="createFormPanel" class="collapse panel-collapse <?php if ($editting) { echo 'in'; } ?>">
 			<div class="panel-body">
 				<form method="post" name="activityForm" action="activities.php">
 				<input type="hidden" name="id" value="
@@ -92,19 +92,19 @@
 				?>"><br/>-->
 				</div>
 				<div class="form-group">
-					<label for="day">Day (daily, weekly):</label>
+					<label for="day">Interval (Daily, Weekly):</label>
 					<select name="day" class="form-control">
 						<?php
 							if ($editting && $day == 'daily') {
-								echo '<option value="daily" selected="true">daily</option>';
+								echo '<option value="daily" selected="true">Daily</option>';
 							} else {
-								echo '<option value="daily">daily</option>';
+								echo '<option value="daily">Daily</option>';
 							}
 							
 							if ($editting && $day == 'weekly') {
-								echo '<option value="weekly" selected="true">weekly</option>';
+								echo '<option value="weekly" selected="true">Weekly</option>';
 							} else {
-								echo '<option value="weekly">weekly</option>';
+								echo '<option value="weekly">Weekly</option>';
 							}
 						?>
 					</select>

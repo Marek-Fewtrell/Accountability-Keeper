@@ -46,7 +46,7 @@
 				</h4>
 			</a>
 		</div>
-		<div id="createFormPanel" class="collapse panel-collapse">
+		<div id="createFormPanel" class="collapse panel-collapse <?php if ($editting) { echo 'in'; } ?>">
 			<div class="panel-body">
 				<form method="post" name="scheduleForm" action="schedule.php">
 					<input type="hidden" name="id" value="

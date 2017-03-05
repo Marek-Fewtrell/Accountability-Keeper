@@ -10,8 +10,8 @@
 			
 		} else {
 			include 'header.html';
-			echo "User details<br/>";
-			echo "username: " . $_SESSION['username'] . '<br/>';
+			echo "<h4>Currently Logged In</h4>";
+			echo "<p>Username: " . $_SESSION['username'] . '</p>';
 			echo "<br/><a href=\"userAccount.php?logout=true\">Logout</a>";
 			include 'footer.html';
 		}

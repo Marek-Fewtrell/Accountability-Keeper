@@ -10,7 +10,7 @@
 
 	$month = (isset($_GET['month'])) ? $_GET['month'] : date('n');
 	$year = (isset($_GET['year'])) ? $_GET['year'] : date('Y');
-	echo '<h5>Jump to month</h5>';
+	echo '<h4>Jump To Month</h4>';
 	echo '<form method="get" class="form-inline">';
 	echo '<div class="form-group">';
 	echo '<label for="year">Month:</label>';
@@ -20,16 +20,18 @@
 	echo '<label for="year">Year:</label>';
 	echo "<input type=\"number\" class=\"form-control\" name=\"year\" value=\"$year\"><br/>";
 	echo '</div>';
-	echo '<input type="submit" class="btn btn-default">';
+	echo '<input type="submit" class="btn btn-default" value="Change">';
 	echo '</form>';
 	echo '<hr>';
-
-	echo '<a href="/Accountability-Keeper/calendar.php?month=';
+	
+	echo '<div class="row">';
+	echo '<a class="col-xs-6 text-left" href="/Accountability-Keeper/calendar.php?month=';
 	echo ($month - 1 < 1) ? '12' : ($month -1);
-	echo '">Previous Month</a>';
-	echo '<a href="/Accountability-Keeper/calendar.php?month=';
+	echo '">< Previous Month</a>';
+	
+	echo '<a class="col-xs-6 text-right" href="/Accountability-Keeper/calendar.php?month=';
 	echo ($month+1 > 12) ? '1' : ($month + 1);
-	echo '">Next Month</a>';
+	echo '">Next Month ></a>';
 	createTable($month, $year);
 	
 	include 'footer.html';
@@ -38,7 +40,7 @@
 
 
 	function createTable($month, $year) {
-		echo "<table class=\"table\">";
+		echo "<table class=\"table text-center\">";
 		
 		//$days = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 		$days = array('Sun', 'Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat');
@@ -66,11 +68,11 @@
 		$totalDaysOutput += $blankDays;
 		
 		for ($x = 1; $x <= $daysInMonth; $x++) {
-			echo '<td><a href="day.php?day='.$x.'&month='.$month.'&year='.$year.'">' . $x;
+			echo '<td';
 			if ($x == date('j') && $month == date('m')) {
-				echo 'Today!';
+				echo ' class="alert alert-info" ';
 			}
-			echo '</a></td>';
+			echo '><a href="day.php?day='.$x.'&month='.$month.'&year='.$year.'"><div>' . $x . '</div></a></td>';
 			$totalDaysOutput++;
 			if ($totalDaysOutput % 7 == 0) {
 				echo "</tr><tr>";

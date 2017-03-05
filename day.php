@@ -10,13 +10,12 @@
 	$dateTimeStamp = mktime(0,0,0, $_GET['month'], $_GET['day'], $_GET['year']);
 	$currentDate = date('Y-m-d', $dateTimeStamp);
 	
-	echo 'The day is:<br/>';
-	echo date('d(D)-F-Y', $dateTimeStamp);
+	echo '<h5>This day is:</h5>';
+	echo date('l \t\h\e j-F-Y', $dateTimeStamp);
 	
-	echo '<br/><br/>List of stuff to output<br/><br/>';
+	echo '<h4>List of stuff to output</h4><hr>';
 	
 	$userId = $_SESSION['userId'];
-	
 	
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (isset($_POST['formAction'])) {
@@ -34,10 +33,8 @@
 				} else {
 					outputStatusMessage('Unsuccessfully updated record.', 'warning');
 				}
-				
 			}
 		}
-		
 	}
 	
 	//getRecord($userId, $currentDate);

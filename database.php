@@ -137,7 +137,7 @@
     
     function db_getUserSchedule($userId) {
     	$conn = connect();
-		  $sql = "select schedule.id, activities.id AS activitiesId, activities.name, activities.description, activities.day, activities.time, schedule.startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
+		  $sql = "select schedule.id, activities.id AS activitiesId, activities.name, activities.description, activities.day, activities.time, DATE_FORMAT(schedule.startDate, '%e-%c-%Y') as startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
 		  //echo $sql;
 		  $result = $conn->query($sql);
 		  

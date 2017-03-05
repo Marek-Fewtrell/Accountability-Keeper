@@ -37,7 +37,7 @@
 					echo '<div class="row">';
 						echo '<div class="col-md-9 row">';
 							echo '<h4 class="list-group-item-heading col-md-6">Name: ' . $row["name"] . "</h4>";
-							echo '<p class="col-md-6 text-center">Start Date: ' . $row['startDate'] . '</p>';
+							echo '<p class="col-md-6 text-center">Start Date(d-m-y): ' . $row['startDate'] . '</p>';
 							echo '<p class="list-group-item-text col-md-12">Description: ' . $row["description"] . "</p>";
 						echo '</div>';
 						echo "<div class=\"col-md-3 btn-group\"><a href=\"?edit&id=" . $row['id'] . "\" class=\"btn btn-default\">Edit</a>";
