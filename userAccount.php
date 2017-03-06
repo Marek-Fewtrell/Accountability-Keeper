@@ -1,7 +1,15 @@
 <?php
+	/*
+	 * userAccount page.
+	 * This page shows the login form when no user is logged in.
+	 * This page shows the a logout button and the username of the user logged in.
+	 * 
+	*/
+	
 	session_start();
 	if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true) {
 		if (isset($_GET["logout"]) && $_GET['logout'] == 'true') {
+			//Logging out
 			session_unset();
 			session_destroy();
 			
@@ -9,6 +17,7 @@
 			include 'loginForm.php';
 			
 		} else {
+			//Logged in and viewing the page.
 			include 'header.html';
 			echo "<h4>Currently Logged In</h4>";
 			echo "<p>Username: " . $_SESSION['username'] . '</p>';
@@ -45,7 +54,6 @@
 				
 					//maybe just redirect to the calendar
 					
-					//echo "Now logged in.";
 					$_SESSION['loggedIn'] = true;
 					$_SESSION['username'] = $_POST["loginUsername"];
 					$_SESSION['userId'] = $result;

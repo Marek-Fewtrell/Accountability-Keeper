@@ -1,4 +1,8 @@
 <?php
+	/*
+	 * The login and create user forms found in userAccount.php
+	*/
+
 	include 'header.html';
 ?>
 

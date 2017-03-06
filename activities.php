@@ -1,12 +1,21 @@
 <?php
+	/*
+	 * Activites page.
+	 * This page controls the activities which can be done.
+	 * This page provides full CRUD abilities.
+	 * 
+	*/
+	
 	session_start();
 	if (!isset($_SESSION['loggedIn'])) {
+		//Only logged in users allowed.
 		header('Location: /Accountability-Keeper/userAccount.php');
 		exit();
 	}
 	include 'header.html';
 	include 'helper.php';
 	
+	//Some variables used when editing and to fill in the activites form when necessary.
 	$editting = false;
 	$id = "";
 	$name = "";
@@ -24,16 +33,19 @@
 			$name = $result['name'];
 			$desc = $result['description'];
 			$time = $result['time'];
+			//Time comes in HH:MM
+			//{[H],[H], [:], [M],[M]}
 			$timeHour = $time[0].$time[1];
 			$timeMinute = $time['3'].$time['4'];
 			$day = $result['day'];
 			$editting = true;
 		} else {
-			echo 'No activity found by that id';
+			echo '<h5>No activity found.</h5>';
 		}
 	}
 ?>
 
+<!-- Collapsible panel to hold the form -->
 <div class="panel-group">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -52,6 +64,7 @@
 		</div>
 		<div id="createFormPanel" class="collapse panel-collapse <?php if ($editting) { echo 'in'; } ?>">
 			<div class="panel-body">
+				<!-- Activities form -->
 				<form method="post" name="activityForm" action="activities.php">
 				<input type="hidden" name="id" value="
 				<?php
@@ -130,7 +143,6 @@
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (isset($_POST['createAction'])) {
 			$theTime = $_POST['timeHour'] . ':' . $_POST['timeMinute'] . ':00';
-			//$result = addActivity($_POST['name'], $_POST['description'], $_POST['time'], $_POST['day']);
 			$result = addActivity($_POST['name'], $_POST['description'], $theTime, $_POST['day']);
 			if ($result) {
 				outputStatusMessage('Successfully added activity.', 'success');
@@ -145,7 +157,6 @@
 			}
 		} else if (isset($_POST['updateAction'])) {
 			$theTime = $_POST['timeHour'] . ':' . $_POST['timeMinute'] . ':00';
-			//$result = updateActivity($_POST['id'], $_POST['name'], $_POST['description'], $_POST['time'], $_POST['day']);
 			$result = updateActivity($_POST['id'], $_POST['name'], $_POST['description'], $theTime, $_POST['day']);
 			if ($result) {
 				outputStatusMessage('Successfully updated activity.', 'success');
@@ -153,7 +164,6 @@
 				outputStatusMessage('Unsuccessfully updated activity.', 'warning');
 			}
 		}
-		
 	}
 	
 	getListOfActivities();

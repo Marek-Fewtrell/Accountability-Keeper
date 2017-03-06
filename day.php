@@ -1,6 +1,13 @@
 <?php
+	/*
+	 * Day page.
+	 * This page shows which activities can be done when scheduled.
+	 * This page provides full CRUD abilities for records.
+	 * 
+	*/
 	session_start();
 	if (!isset($_SESSION['loggedIn'])) {
+		//Only logged in users allowed.
 		header('Location: /Accountability-Keeper/userAccount.php');
 		exit();
 	}
@@ -11,9 +18,9 @@
 	$currentDate = date('Y-m-d', $dateTimeStamp);
 	
 	echo '<h5>This day is:</h5>';
-	echo date('l \t\h\e j-F-Y', $dateTimeStamp);
+	echo date('l \t\h\e jS \o\f F Y', $dateTimeStamp);
 	
-	echo '<h4>List of stuff to output</h4><hr>';
+	echo '<hr><h4>Activites Scheduled This Day</h4>';
 	
 	$userId = $_SESSION['userId'];
 	
@@ -37,24 +44,19 @@
 		}
 	}
 	
-	//getRecord($userId, $currentDate);
+	$previousRecords = db_getRecord($userId, $currentDate); //Retrieves and records which have already been created.
 	
-	$previousRecords = db_getRecord($userId, $currentDate);
+	$scheduleArray = db_getUserScheduleAfterDate($userId, $currentDate); //Retrieves the schedule for today.
 	
-	$scheduleArray = db_getUserScheduleAfterDate($userId, $currentDate);
-	echo '<hr>';
 	if ($scheduleArray) {
 		echo '<ul class="list-group">';
 		foreach($scheduleArray as $item) {
-			//echo 'Started On: ' . $item['startDate'] . '<br/>';
 			$timeSInce = calculateIfOnThisDay($currentDate, $item['startDate'])->format('%a days') . '<br/>';
-			
-			//$searchResult = array_search(, $previousRecords);
+
 			$searchResult = false;
 			if ($previousRecords != FALSE) {
 				$searchResult = searchRecordsArray($previousRecords, $item['activitiesId']);
 			}
-			//echo 'Here is the search Result:'.$searchResult . '<hr>';
 			
 			//if it's not on today, then output the number of days until it is.
 			//else output the item for today.
@@ -69,9 +71,6 @@
 						echo outputReportItem('Weekly', $searchResult, $item, false);
 					} else {
 						echo outputReportItem('Weekly', $searchResult, $item, $weeklyTimeSince);
-						/*echo $item['name'] . ' is not today<br/>';
-						echo $item['description'] . '<br/>';
-						echo 'it is in ' . abs($weeklyTimeSince - 7) . ' day';*/
 					}
 					break;
 				default:

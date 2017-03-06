@@ -1,7 +1,13 @@
 
 <?php
+	/*
+	 * A helper file which handles misc stuff.
+	 * 
+	*/
+
 	include 'database.php';
 	
+	//Creates the list of activities that are available.
 	function getListOfActivities() { 
 		$result = db_getListOfActivities();
 		
@@ -26,6 +32,7 @@
   	echo '</form>';
 	}
 	
+	//Creates the list for the user schedule.
 	function getUserSchedule($userId) {
 		$result = db_getUserSchedule($userId);
 		if ($result) {
@@ -54,22 +61,7 @@
 		}
 	}
 	
-	function getRecord($userId, $date) {
-	  $result = db_getRecord($userId, $date);
-	  
-	  echo '<table class="table">';
-  	echo '<tr><td>activityId</td><td>status</td></tr>';
-  	if ($result) {
-  		foreach($result as $row) {
-				echo "<tr><td>" . $row["activityId"] . "</td><td>" . $row["status"] . "</tr>";
-			}
-		} else {
-			echo '<br/>'.'Nothing retrieved for getRecord' . '<br/>';
-		}
-  	echo '</table>';
-	  //echo "userId: " . $row["userId"] . " activityId: " . $row["activityId"] . " status: " . $row["status"];
-  }
-  
+  //Outputs a single record item as a list item.
   function outputReportItem($interval, $searchResult, $item, $weeklyTimeSince) {
 		if ($item['day'] == 'weekly') {
 			//echo 'It has been a week since<br/>';
@@ -131,6 +123,7 @@
 		echo '</li>';
   }
   
+  //Searches the record array to find a specific item and returns it.
   function searchRecordsArray($array, $searchTerm) {
 		foreach($array as $row) {
 			if ($row['activityId'] == $searchTerm) {
@@ -140,6 +133,7 @@
 		return false;
 	}
   
+  //Creates the month dropdown in forms.
   function createMonthDropdown($name, $currentlySelected) {
   	$months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
   	$output = '<select name="'.$name.'" class="form-control">';
@@ -156,6 +150,7 @@
   	return $output;
   }
   
+  //Calculates how many days have passed between two dates.
   function calculateIfOnThisDay($curDate, $initialDate) {
   	$date1 = new DateTime($curDate);
   	$date2 = new DateTime($initialDate);
@@ -166,6 +161,7 @@
   	
   }
   
+  //Outputs a div which is styled to look as an alert.
   function outputStatusMessage($message, $status) {
   	echo '<div class="alert alert-'.$status.'">'.$message.'</div>';
   }

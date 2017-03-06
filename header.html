@@ -20,7 +20,9 @@
 			<?php
 				
 				if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+					//Only logged in users see the nav menu.
 				?>
+					
 					<ul class="nav navbar-nav">
 						<li><a href="index.php">Schedule</a></li>
 						<li><a href="userAccount.php">User Account</a>

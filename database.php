@@ -1,6 +1,9 @@
 <?php
-
-    //connects to the database and gets the stuff when needed.
+	/*
+	 * Database interaction is handled in this file.
+	 *
+	*/
+    //Connects to the database and sets up the connection
     function connect() {
     	$serverName = "localhost";
 		  $userName = "ak-dbAccess";
@@ -16,13 +19,14 @@
 		  return $conn;
     }
     
+    //Disconnects from the database.
     function disconnect($conn) {
     	$conn->close();
     }
     
     //--------------------------------------------------------------------
     
-    
+    //Retrieves all activities.
     function db_getListOfActivities() {
     	$conn = connect();
 		  $sql = "select *, DATE_FORMAT(time, '%h:%i') as formatted_time from `activities`";
@@ -42,10 +46,10 @@
 		  disconnect($conn);
     }
     
+    //Retrieves just one activity by ID.
     function getActivity($id) {
     	$conn = connect();
 		  $sql = "select * from activities where id=$id";
-		  //echo $sql;
 		  $result = $conn->query($sql);
 		  
 		  if ($result->num_rows > 0) {
@@ -56,10 +60,10 @@
 		  }
     }
     
+    //Inserts an activity.
     function addActivity($name, $desc, $time, $day) {
     	$conn = connect();
 		  $sql = "insert into activities (name, description, time, day) values ('$name', '$desc', '$time', '$day')";
-		  //echo $sql;
 		  $result = $conn->query($sql);
 		  
 		  if ($result === TRUE) {
@@ -70,10 +74,10 @@
 		  disconnect($conn);
     }
     
+    //Updates a specific activity.
     function updateActivity($id, $name, $description, $time, $day) {
     	$conn = connect();
     	$sql = "update activities set name='$name', description='$description', time='$time', day='$day' where id=$id";
-    	//echo $sql;
     	
     	$result = $conn->query($sql);
     	
@@ -84,10 +88,10 @@
     	}
     }
     
+    //Deletes an activity.
     function deleteActivity($id) {
     	$conn = connect();
     	$sql = "delete from activities where id = $id";
-    	//echo $sql;
     	
     	$result = $conn->query($sql);
     	
@@ -100,7 +104,7 @@
     
     //--------------------------------------------------------------------
     
-    
+    //Checks whether the provided user name and password are a user in the database.
     function checkUserLogin($username, $password) {
     	$conn = connect();
     	$sql = "select count(*), id from `user` where `name` = '".$username."' and `password` = '".$password."'";
@@ -114,10 +118,10 @@
 		  }
     }
     
+    //Creates a new user.
     function createUser($username, $password) {
     	$conn = connect();
     	$sql = "insert into `user` (name, password) values ('$username', '$password')";
-		 	//echo $sql;
 		  $result = $conn->query($sql);
 		  
 		  if ($result === TRUE) {
@@ -128,17 +132,13 @@
 		  disconnect($conn);
     }
     
-    function getUserId() {
-    	
-    }
     
     //--------------------------------------------------------------------
     
-    
+    //Gets the schedule for a user.
     function db_getUserSchedule($userId) {
     	$conn = connect();
 		  $sql = "select schedule.id, activities.id AS activitiesId, activities.name, activities.description, activities.day, activities.time, DATE_FORMAT(schedule.startDate, '%e-%c-%Y') as startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId;
-		  //echo $sql;
 		  $result = $conn->query($sql);
 		  
 		  $resultArray = array();
@@ -154,10 +154,10 @@
 		  disconnect($conn);
     }
     
+    //Gets the schedule for a user after a specified date.
     function db_getUserScheduleAfterDate($userId, $date) {
     	$conn = connect();
 		  $sql = "select schedule.id, activities.id AS activitiesId, activities.name, activities.description, activities.day, DATE_FORMAT(activities.time, '%h:%i') as time, schedule.startDate from activities INNER JOIN schedule ON schedule.activityId = activities.id where schedule.userId = " . $userId . " and schedule.startDate <= '" . $date . "'";
-		  //echo $sql;
 		  $result = $conn->query($sql);
 		  
 		  $resultArray = array();
@@ -173,10 +173,10 @@
 		  disconnect($conn);
     }
     
+    //Retrieves a single schedule item by ID.
     function db_getSingleScheduleItem($id) {
     	$conn = connect();
 		  $sql = "select * from schedule where id=$id";
-		  //echo $sql;
 		  $result = $conn->query($sql);
 		  
 		  if ($result->num_rows > 0) {
@@ -187,10 +187,10 @@
 		  }
     }
     
+    //Inserts a new schedule item.
     function createSchedule($activityId, $userId, $startDate) {
     	$conn = connect();
 		  $sql = "insert into schedule (activityId, userId, startDate) values ('$activityId', '$userId', '$startDate')";
-		  //echo $sql;
 		  $result = $conn->query($sql);
 		  
 		  if ($result === TRUE) {
@@ -200,10 +200,11 @@
 		  }
 		  disconnect($conn);
     }
+    
+    //Updates a schedule item.
     function updateSchedule($activityId, $startDate, $id) {
     	$conn = connect();
     	$sql = "update schedule set activityId='$activityId', startDate='$startDate' where id=$id";
-    	//echo $sql;
     	
     	$result = $conn->query($sql);
     	
@@ -213,10 +214,11 @@
     		return false;
     	}
     }
+    
+    //Deletes a schedule item.
     function deleteSchedule($id) {
     	$conn = connect();
     	$sql = "delete from schedule where id = $id";
-    	//echo $sql;
     	
     	$result = $conn->query($sql);
     	
@@ -229,7 +231,7 @@
     
     //--------------------------------------------------------------------
     
-    
+    //Retrieves all the records for a specified user.
     function getListOfRecords($userId) {
     	$conn = connect();
 		  $sql = "select * from records where userId = $userId";
@@ -249,17 +251,16 @@
 		  disconnect($conn);
     }
     
+    //Get all records for a user for a date.
     function db_getRecord($userId, $date) {
     	$conn = connect();
 		  $sql = "SELECT * FROM `record` WHERE userId = " . $userId . " and DATE(date) = '" . $date . "'";
-		  //echo $sql;
 		  $result = $conn->query($sql);
 		  $resultArray = array();
 		  if ($result->num_rows > 0) {
 		  	
 		  	while($row = $result->fetch_assoc()) {
 		  		array_push($resultArray, $row);
-		  		//echo "userId: " . $row["userId"] . " activityId: " . $row["activityId"] . " status: " . $row["status"];
 		  	}
 		  	return $resultArray;
 		  } else {
@@ -268,11 +269,11 @@
 		  disconnect($conn);
     }
     
+    //Inserts a new record.
     function createRecord($userId, $activityId, $status, $date) {
     	$conn = connect();
 		  //$sql = "insert into record (userId, activityId, status, date) values ('$userId', '$activityId', '$status', '$date')";
 		  $sql = "insert into record (userId, activityId, status, date) values ('$userId', '$activityId', '$status', NOW())";
-		  //echo $sql;
 		  $result = $conn->query($sql);
 		  
 		  if ($result === TRUE) {
@@ -282,10 +283,11 @@
 		  }
 		  disconnect($conn);
     }
+    
+    //Updates a record.
     function updateRecord($userId, $recordId, $status) {
     	$conn = connect();
     	$sql = "update record set status='$status', date=NOW() where id=$recordId and userId = $userId";
-    	//echo $sql;
     	
     	$result = $conn->query($sql);
     	
@@ -295,32 +297,5 @@
     		return false;
     	}
     }
-    function deleteRecord() {
-    	
-    }
-    
-    
-    
-    //--------------------------------------------------------------------
-    
-    
-    function getstuff() {
-    	$conn = connect();
-		  $sql = "select activities.name, user.name from `schedule`, `activities`, `user`";
-		  
-		  $result = $conn->query($sql);
-		  
-		  if ($result->num_rows > 0) {
-		  	while($row = $result->fetch_assoc()) {
-		  		echo "activities name: " . $row["name"] . " - user.name: " . $row["name"];
-		  	}
-		  } else {
-		  	echo "0 results";
-		  }
-		  disconnect($conn);
-		  
-    }
-    
-    
-    
+
 ?> 

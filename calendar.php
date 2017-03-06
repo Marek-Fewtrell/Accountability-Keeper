@@ -1,7 +1,15 @@
 
 <?php
+	/*
+	 * Calendar page.
+	 * This page contains the calendar. Can jump to other months with a form.
+	 * Can select a day to view that day in details. No other actions available.
+	 * 
+	*/
+	
 	session_start();
 	if (!isset($_SESSION['loggedIn'])) {
+		//Only logged in users allowed.
 		header('Location: /Accountability-Keeper/userAccount.php');
 		exit();
 	}
@@ -10,6 +18,7 @@
 
 	$month = (isset($_GET['month'])) ? $_GET['month'] : date('n');
 	$year = (isset($_GET['year'])) ? $_GET['year'] : date('Y');
+	//Form which allows you to jump to a selected month.
 	echo '<h4>Jump To Month</h4>';
 	echo '<form method="get" class="form-inline">';
 	echo '<div class="form-group">';
@@ -38,11 +47,14 @@
 
 
 
-
+	/*
+	 * createTable(month, year)
+	 * Simply outputs a table for the selected month and year.
+	 * Each day can be selected to view in more detail.
+	*/
 	function createTable($month, $year) {
 		echo "<table class=\"table text-center\">";
 		
-		//$days = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 		$days = array('Sun', 'Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat');
 		//create the table headers which hold the days.
 		echo '<tr>';
@@ -53,12 +65,10 @@
 		
 		$totalDaysOutput = 0;
 		$day = 1;
-		//$month = 3;
-		//$year = 2017;
 		
 		$daysInMonth = date('t', mktime(0, 0, 0, $month, $day, $year)); //How many days in the month.
 		
-		$blankDays = date('w', mktime(0, 0, 0, $month, $day, $year));
+		$blankDays = date('w', mktime(0, 0, 0, $month, $day, $year)); //Blank days to fill until 1st of month.
 		
 		echo '<tr>';
 		
@@ -78,16 +88,6 @@
 				echo "</tr><tr>";
 			}
 		}
-		
-		/*for ($weeks = 1; $weeks <= 4; $weeks++) {
-			echo '<tr>';
-			for ($weekDays = 1; $weekDays <= 7; $weekDays++) {
-				echo '<td>';
-				echo $weekDays * $weeks;
-				echo '</td>';
-			}
-			echo '</tr>';
-		}*/
 		
 		echo "</table>";
 	}

@@ -1,6 +1,14 @@
+
 <?php
+	/*
+	 * Schedule page.
+	 * This page controls the schedule which can be set.
+	 * This page provides full CRUD abilities.
+	 * 
+	*/
 	session_start();
 	if (!isset($_SESSION['loggedIn'])) {
+		//Only logged in users allowed.
 		header('Location: /Accountability-Keeper/userAccount.php');
 		exit();
 	}
@@ -8,20 +16,18 @@
 	include 'header.html';
 	include 'helper.php';
 	
+	//Some variables used when editing and to fill in the activites form when necessary.
 	$editting = false;
 	$id = "";
 	$activityId = "";
 	$tempCurrentDate = getdate();
 	$startDate = $tempCurrentDate['year'].'-'.$tempCurrentDate['mon'].'-'.$tempCurrentDate['mday'];
-	//var_dump($startDate);
-	//echo date_format($startDate, "Y/m/d");
 	
 	if (isset($_GET['edit'])) {
 		$result = db_getSingleScheduleItem($_GET['id']);
 		if ($result) {
 			$id = $result['id'];
 			$activityId = $result['activityId'];
-			//$startDate = date_create($result['startDate']);
 			$startDate = $result['startDate'];
 			$editting = true;
 		} else {
@@ -30,6 +36,7 @@
 	}
 ?>
 
+<!-- Collapsible panel to hold the form -->
 <div class="panel-group">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -48,6 +55,7 @@
 		</div>
 		<div id="createFormPanel" class="collapse panel-collapse <?php if ($editting) { echo 'in'; } ?>">
 			<div class="panel-body">
+				<!-- Schedule form -->
 				<form method="post" name="scheduleForm" action="schedule.php">
 					<input type="hidden" name="id" value="
 					<?php
@@ -73,12 +81,10 @@
 					<?php
 		
 						$newDate = new DateTime($startDate);
-						//echo $newDate->format('Y-m-d');
 		
 						$day = $newDate->format('d');
 						$month = $newDate->format('m');
 						$year = $newDate->format('Y');
-						//echo $day . '-' . $month . '-' . $year;
 		
 						if ($editting) {
 							echo 'Current start date (d-m-y): ' . $newDate->format('d-m-Y') . '<br/>';
@@ -151,8 +157,6 @@
 	
 	getUserSchedule($_SESSION['userId']);
 	
-		?>
-<?php
 	include 'footer.html'
 ?>
 
