@@ -53,7 +53,7 @@
 				</h4>
 			</a>
 		</div>
-		<div id="createFormPanel" class="collapse panel-collapse <?php if ($editting) { echo 'in'; } ?>">
+		<div id="createFormPanel" class="collapse panel-collapse <?php if ($editting || isset($_GET['create'])) { echo 'in'; } ?>">
 			<div class="panel-body">
 				<!-- Schedule form -->
 				<form method="post" name="scheduleForm" action="schedule.php">
@@ -73,7 +73,7 @@
 								if($row['id'] == $activityId) {
 									echo ' selected ';
 								}
-								echo ">".$row['name']."</option>";
+								echo " style=\"color:" . $row['colour'] . "\">".$row['name']."</option>";
 							}
 						?>
 					</select>
@@ -116,6 +116,7 @@
 							echo '<input type="submit" class="btn btn-default" name="createAction" value="Create">';
 						}
 					?>
+					<a href="schedule.php?create" class="btn btn-default">Cancel</a>
 				</form>
 			</div>
 		</div>

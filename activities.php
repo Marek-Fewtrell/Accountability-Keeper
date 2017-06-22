@@ -5,7 +5,7 @@
 	 * This page provides full CRUD abilities.
 	 * 
 	*/
-	
+	error_reporting(E_ALL);
 	session_start();
 	if (!isset($_SESSION['loggedIn'])) {
 		//Only logged in users allowed.
@@ -23,6 +23,9 @@
 	$time = "";
 	$timeHour = "1";
 	$timeMinute = "00";
+	$actColour = "";
+	
+	$colours = ['red', 'blue', 'black', 'green', 'yellow', 'orange', 'purple', 'pink', 'brown'];
 	
 	$day = "";
 	
@@ -37,6 +40,7 @@
 			//{[H],[H], [:], [M],[M]}
 			$timeHour = $time[0].$time[1];
 			$timeMinute = $time['3'].$time['4'];
+			$actColour = $result['colour'];
 			$day = $result['day'];
 			$editting = true;
 		} else {
@@ -62,7 +66,7 @@
 				</h4>
 			</a>
 		</div>
-		<div id="createFormPanel" class="collapse panel-collapse <?php if ($editting) { echo 'in'; } ?>">
+		<div id="createFormPanel" class="collapse panel-collapse <?php if ($editting || isset($_GET['create'])) { echo 'in'; } ?>">
 			<div class="panel-body">
 				<!-- Activities form -->
 				<form method="post" name="activityForm" action="activities.php">
@@ -79,6 +83,21 @@
 							echo $name;
 						}
 					?>">
+				</div>
+				<div class="form-group">
+					<label for="name">Colour:</label>
+					<select name="colour" class="form-control">
+						<option>None</option>
+					<?php
+						foreach($colours as $colour) {
+							if ($editting && $actColour == $colour) {
+								echo '<option selected="true" value="'.$colour.'">' . $colour . '</option>';
+							} else {
+								echo '<option value="'.$colour.'">' . $colour . '</option>';
+							}
+						}
+					?>
+					</select>
 				</div>
 				<div class="form-group">
 					<label for="description">Description:</label>
@@ -129,6 +148,7 @@
 					echo '<input type="submit" class="btn btn-default" name="createAction" value="Create">';
 				}
 				?>
+				<a href="activities.php?create" class="btn btn-default">Cancel</a>
 			</form>
 			</div>
 		</div>
@@ -143,7 +163,7 @@
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (isset($_POST['createAction'])) {
 			$theTime = $_POST['timeHour'] . ':' . $_POST['timeMinute'] . ':00';
-			$result = addActivity($_POST['name'], $_POST['description'], $theTime, $_POST['day']);
+			$result = addActivity($_POST['name'], $_POST['description'], $theTime, $_POST['day'], $_POST['colour']);
 			if ($result) {
 				outputStatusMessage('Successfully added activity.', 'success');
 			} else {
@@ -157,7 +177,7 @@
 			}
 		} else if (isset($_POST['updateAction'])) {
 			$theTime = $_POST['timeHour'] . ':' . $_POST['timeMinute'] . ':00';
-			$result = updateActivity($_POST['id'], $_POST['name'], $_POST['description'], $theTime, $_POST['day']);
+			$result = updateActivity($_POST['id'], $_POST['name'], $_POST['description'], $theTime, $_POST['day'], $_POST['colour']);
 			if ($result) {
 				outputStatusMessage('Successfully updated activity.', 'success');
 			} else {

@@ -6,18 +6,21 @@
 	*/
 
 	include 'database.php';
-	
+
+	$colours = array("red", "blue", "black", "green", "yellow", "orange", "purple", "pink", "brown");
+
 	//Creates the list of activities that are available.
 	function getListOfActivities() { 
+		global $colours;
 		$result = db_getListOfActivities();
-		
+	
 		echo '<form method="post" name="activityForm">';
 		echo '<ul class="list-group">';
 		foreach($result as $row) {
 			echo '<li class="list-group-item">';
 				echo '<div class="row">';
 					echo '<div class="col-md-9 row">';
-						echo '<h4 class="list-group-item-heading col-md-4">Name: ' . $row["name"] . "</h4>";
+						echo '<h4 class="list-group-item-heading col-md-4" style="color:' . $row["colour"] . '">Name: ' . $row["name"] . "</h4>";
 						echo '<p class="col-md-4">Time: ' . $row["formatted_time"] . '</p>';
 						echo '<p class="col-md-4">Interval: ' . $row["day"] . '</p>';
 						echo '<p class="list-group-item-text col-md-12">Description: ' . $row["description"] . "</p>";
@@ -25,13 +28,13 @@
 					echo "<div class=\"col-md-3 btn-group\"><a href=\"?edit&id=" . $row['id'] . "\" class=\"btn btn-default\">Edit</a>";
 					echo '<button name="removeAction" value="'.$row['id'].'" class="btn btn-danger">Remove</button></div>';
 				echo '</div>';
-				
+			
 			echo '</li>';
   	}
   	echo '</ul>';
   	echo '</form>';
 	}
-	
+
 	//Creates the list for the user schedule.
 	function getUserSchedule($userId) {
 		$result = db_getUserSchedule($userId);
@@ -43,7 +46,7 @@
 					echo '<li class="list-group-item">';
 					echo '<div class="row">';
 						echo '<div class="col-md-9 row">';
-							echo '<h4 class="list-group-item-heading col-md-6">Name: ' . $row["name"] . "</h4>";
+							echo '<h4 class="list-group-item-heading col-md-6" style="color:'. $row['colour'] .'">Name: ' . $row["name"] . "</h4>";
 							echo '<p class="col-md-6 text-center">Start Date(d-m-y): ' . $row['startDate'] . '</p>';
 							echo '<p class="list-group-item-text col-md-12">Description: ' . $row["description"] . "</p>";
 						echo '</div>';
@@ -54,29 +57,28 @@
 				}
 			}
 			echo '</ul>';
-			echo '<button name="removeAction" value="'. $row['id'] . '" class="btn btn-danger">Remove</button>';
 			echo '</form>';
 		} else {
 			echo 'Nothing has been scheduled';
 		}
 	}
-	
+
   //Outputs a single record item as a list item.
   function outputReportItem($interval, $searchResult, $item, $weeklyTimeSince) {
 		if ($item['day'] == 'weekly') {
 			//echo 'It has been a week since<br/>';
 		}
-		
+	
 		echo '<li class="list-group-item">';
 		echo '<div class="row">';
-		echo "<h4 class=\"list-group-item-heading col-md-6\">$interval activity | ";
-		
-  	echo $item['name'] . '</h4>';
+		echo "<h4 class=\"list-group-item-heading col-md-6\" style=\"color:" . $item['colour'] . "\">$interval activity | ";
+	
+  		echo $item['name'] . '</h4>';
   	
 		echo '<p class="col-md-5">At time: ' . $item['time'] . '</p>';
 		echo '</div>';
 		echo $item['description'] . '<br/>';
-		
+	
 		if (!$weeklyTimeSince) {
 			echo '<form method="post" class="form-inline">';
 			echo '<input type="hidden" name="activityId" value="'.$item['activitiesId'].'">';
@@ -87,7 +89,7 @@
 				echo '<input type="hidden" name="theId" value="'.$searchResult['id'].'">';
 			}
 			echo '<div class="form-group">';
-		
+	
 			if ($searchResult['status'] == 'done') {
 				echo '<div class="label label-success">Done</div>';
 			} else if ($searchResult['status'] == 'partial done') {
@@ -95,7 +97,7 @@
 			} else {
 				echo '<div class="label label-danger">Not Done</div>';
 			}
-		
+	
 			echo '<label for="status">Status:</label>';
 			echo '<select name="status" class="form-control">';
 			if ($searchResult['status'] == 'done') {
@@ -156,14 +158,23 @@
   	$date2 = new DateTime($initialDate);
   	
   	$interval = $date1->diff($date2);
-  	
-  	return $interval;
-  	
-  }
-  
-  //Outputs a div which is styled to look as an alert.
-  function outputStatusMessage($message, $status) {
-  	echo '<div class="alert alert-'.$status.'">'.$message.'</div>';
-  }
-	
-?>
+
+	return $interval;
+
+	}
+
+	//Outputs a div which is styled to look as an alert.
+	function outputStatusMessage($message, $status) {
+		echo '<div class="alert alert-'.$status.'">'.$message.'</div>';
+	}
+
+	function temp($userId, $startDate, $endDate) {
+		$results = db_getActivityColours($userId);
+		foreach($results as $result) {
+			if (calculateIfOnThisDay($result['startDate'], $startDate)) {
+				
+			}
+		}
+	}
+
+	?>

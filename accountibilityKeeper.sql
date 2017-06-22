@@ -1,194 +1,103 @@
--- phpMyAdmin SQL Dump
--- version 4.2.12deb2+deb8u2
--- http://www.phpmyadmin.net
+CREATE DATABASE  IF NOT EXISTS `accountibilityKeeper` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `accountibilityKeeper`;
+-- MySQL dump 10.13  Distrib 5.5.55, for debian-linux-gnu (x86_64)
 --
--- Host: localhost
--- Generation Time: Mar 05, 2017 at 11:11 AM
--- Server version: 5.5.54-0+deb8u1
--- PHP Version: 5.6.30-0+deb8u1
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
+-- Host: localhost    Database: accountibilityKeeper
+-- ------------------------------------------------------
+-- Server version	5.5.55-0+deb8u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
---
--- Database: `accountibilityKeeper`
---
-CREATE DATABASE IF NOT EXISTS `accountibilityKeeper` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `accountibilityKeeper`;
-
--- --------------------------------------------------------
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `activities`
 --
 
 DROP TABLE IF EXISTS `activities`;
-CREATE TABLE IF NOT EXISTS `activities` (
-`id` int(11) NOT NULL,
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activities` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(10) NOT NULL,
   `description` text,
   `time` time DEFAULT NULL,
-  `day` varchar(10) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `activities`
---
-
-INSERT INTO `activities` (`id`, `name`, `description`, `time`, `day`) VALUES
-(4, 'Programmin', 'Doing programming related stuff each day. For one hour at minimum.', '09:00:00', 'daily'),
-(5, 'Exercise', 'Daily exercise. Walking at least 30 minutes.', '06:00:00', 'daily'),
-(6, 'Blog Post', 'Create/Write a blog post once a week.', '12:00:00', 'weekly'),
-(7, 'test', '', '12:41:00', 'daily'),
-(9, 'Holder', '', '01:00:00', '');
-
--- --------------------------------------------------------
+  `day` varchar(10) DEFAULT NULL,
+  `colour` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `record`
 --
 
 DROP TABLE IF EXISTS `record`;
-CREATE TABLE IF NOT EXISTS `record` (
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `record` (
   `userId` int(11) NOT NULL,
   `activityId` int(11) NOT NULL,
   `status` text,
   `date` datetime NOT NULL,
-`id` int(11) NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `activityId` (`activityId`),
+  CONSTRAINT `activityFK` FOREIGN KEY (`activityId`) REFERENCES `activities` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `userFK` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `record`
---
-
-INSERT INTO `record` (`userId`, `activityId`, `status`, `date`, `id`) VALUES
-(1, 4, 'done', '2017-02-28 00:00:00', 1),
-(1, 6, 'done', '2017-02-26 00:00:00', 2),
-(1, 4, 'done', '2017-03-03 20:10:23', 3),
-(1, 5, 'partial done', '2017-03-03 17:00:07', 4),
-(1, 4, 'done', '2017-03-04 12:02:51', 5),
-(1, 5, 'partial done', '2017-03-04 12:03:15', 6);
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `schedule`
 --
 
 DROP TABLE IF EXISTS `schedule`;
-CREATE TABLE IF NOT EXISTS `schedule` (
-`id` int(11) NOT NULL,
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `schedule` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `activityId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
-  `startDate` date DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `schedule`
---
-
-INSERT INTO `schedule` (`id`, `activityId`, `userId`, `startDate`) VALUES
-(6, 4, 1, '2017-02-26'),
-(7, 5, 1, '2017-02-24'),
-(8, 6, 1, '2017-02-26'),
-(11, 7, 1, '2017-03-04');
-
--- --------------------------------------------------------
+  `startDate` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `activityId` (`activityId`,`userId`),
+  KEY `userId` (`userId`),
+  CONSTRAINT `activitiesLink` FOREIGN KEY (`activityId`) REFERENCES `activities` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `userLink` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `user`
 --
 
 DROP TABLE IF EXISTS `user`;
-CREATE TABLE IF NOT EXISTS `user` (
-`id` int(11) NOT NULL,
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(10) NOT NULL COMMENT 'username',
-  `password` varchar(10) NOT NULL COMMENT 'password'
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `password` varchar(10) NOT NULL COMMENT 'password',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Dumping data for table `user`
---
-
-INSERT INTO `user` (`id`, `name`, `password`) VALUES
-(1, 'marek', 'pass');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `activities`
---
-ALTER TABLE `activities`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `record`
---
-ALTER TABLE `record`
- ADD PRIMARY KEY (`id`), ADD KEY `userId` (`userId`), ADD KEY `activityId` (`activityId`);
-
---
--- Indexes for table `schedule`
---
-ALTER TABLE `schedule`
- ADD PRIMARY KEY (`id`), ADD KEY `activityId` (`activityId`,`userId`), ADD KEY `userId` (`userId`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
- ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `activities`
---
-ALTER TABLE `activities`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
---
--- AUTO_INCREMENT for table `record`
---
-ALTER TABLE `record`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `schedule`
---
-ALTER TABLE `schedule`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `record`
---
-ALTER TABLE `record`
-ADD CONSTRAINT `activityFK` FOREIGN KEY (`activityId`) REFERENCES `activities` (`id`) ON DELETE CASCADE,
-ADD CONSTRAINT `userFK` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `schedule`
---
-ALTER TABLE `schedule`
-ADD CONSTRAINT `activitiesLink` FOREIGN KEY (`activityId`) REFERENCES `activities` (`id`) ON DELETE CASCADE,
-ADD CONSTRAINT `userLink` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-06-22 11:18:51
